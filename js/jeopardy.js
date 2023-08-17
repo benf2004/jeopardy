@@ -94,7 +94,7 @@ $(function(){
             $('#modal-answer-title').empty().text(currentBoard[category].name + ' - $' + value);
             $('#question').empty().text(currentBoard[category].questions[question].question);
             if (questionImage){
-                if (questionImage.startsWith("http")) {
+                if (questionImage.startsWith("http") || questionImage.startsWith("data")) {
                     srcPrefix = ''
                 }
                 else {
@@ -158,6 +158,9 @@ $(function(){
     });
     $('#score-adjust').click(function(){
         $('#score-adjust-modal').modal('show');
+        $('#name-player-1-input').val(playerTranslation[1]);
+        $('#name-player-2-input').val(playerTranslation[2]);
+        $('#name-player-3-input').val(playerTranslation[3]);
         $('#score-player-1-input').val(score_player_1);
         $('#score-player-2-input').val(score_player_2);
         $('#score-player-3-input').val(score_player_3);
@@ -207,7 +210,7 @@ var score_player_2 = 0;
 var score_player_3 = 0;
 var control = 1;
 var rounds = ['jeopardy', 'double-jeopardy', 'final-jeopardy'];
-var playerTranslation = {1: 'Red', 2: 'Blue', 3: 'Green'}
+var playerTranslation = {1: 'Red', 2: 'Blue', 3: 'Green'};
 var currentBoard;
 var currentRound = 0;
 var isTimerActive = false;
@@ -251,6 +254,14 @@ function adjustScores(){
             var newScoreValue = $(inputName).val();
             if (!(isNaN(newScoreValue))) {
                 window[scoreVariableName] = parseInt(newScoreValue);
+            }
+
+            var nameInputName = '#name-player-' + i + '-input';
+            var labelInputName = '#player-' + i + '-name';
+            var newNameValue = $(nameInputName).val();
+            if (newNameValue) {
+                playerTranslation[i] = newNameValue;
+                $(labelInputName).empty().text(newNameValue);
             }
         }
 		control = $("input[name=control-input]:checked").val();
@@ -297,7 +308,7 @@ function loadBoard() {
         $('#final-jeopardy-music-button').hide();
         $('#final-jeopardy-answer-button').hide();
         if (finalQuestionImage){
-            if (finalQuestionImage.startsWith("http")) {
+            if (finalQuestionImage.startsWith("http") || finalQuestionImage.startsWith("data")) {
                 srcPrefix = ''
             }
             else {
